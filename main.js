@@ -1,14 +1,17 @@
-const readline = require("readline");
+// import inquirer from "inquirer";
 
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-})
+import { input } from '@inquirer/prompts';
 
-rl.question(
-    "What is your first name?",
-    (answer) => {
-        console.log(`So your name is ${answer}`);
-        rl.close();
-    }
-);
+const validateName = (name) => /[a-zA-Z]{1,50}/.test(name);
+
+const firstName = await input({
+    message: 'Enter your first name:',
+    validate: validateName
+});
+
+const lastName = await input({
+    message: 'Enter your last name:',
+    validate: validateName
+});
+
+console.log(`Hello, ${firstName} ${lastName}.`);
