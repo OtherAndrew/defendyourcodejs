@@ -70,7 +70,7 @@ export const validateSecondInt = (num) => {
         return 'Please input a valid integer (max of 2^31 - 1, min of -2^31).';
     }
     const inputNum = parseInt(num);
-    if (!validateRange(firstInt + inputNum) || !validateRange(firstInt * inputNum)) {
+    if (!validateRange(firstInt * inputNum) || !validateRange(firstInt + inputNum)) {
         return 'Please input an integer that will not cause overflow or underflow when added or multiplied with the first integer (max of 2^31 - 1, min of -2^31).';
     }
     return true;

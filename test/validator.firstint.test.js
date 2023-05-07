@@ -2,6 +2,9 @@
 
 import {validateFirstInt} from "../validator.js";
 
+const MAX = 2147483647;
+const MIN = -2147483648;
+
 test('one digit SUCCESS', () => {
     expect(validateFirstInt('1')).toBe(true);
 });
@@ -23,11 +26,11 @@ test('negative zero SUCCESS', () => {
 });
 
 test('max number SUCCESS', () => {
-    expect(validateFirstInt('2147483647')).toBe(true);
+    expect(validateFirstInt(MAX)).toBe(true);
 });
 
 test('min number SUCCESS', () => {
-    expect(validateFirstInt('-2147483648')).toBe(true);
+    expect(validateFirstInt(MIN)).toBe(true);
 });
 
 test('nothing ERROR', () => {
@@ -51,9 +54,9 @@ test('decimal ERROR', () => {
 });
 
 test('over max number ERROR', () => {
-    expect(validateFirstInt(2147483647 + 1)).not.toBe(true);
+    expect(validateFirstInt(MAX + 1)).not.toBe(true);
 });
 
 test('under min number ERROR', () => {
-    expect(validateFirstInt(-2147483648 - 1)).not.toBe(true);
+    expect(validateFirstInt(MIN - 1)).not.toBe(true);
 });
