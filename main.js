@@ -1,5 +1,6 @@
 import inquirer from 'inquirer';
 import * as fs from "fs";
+import bcrypt from 'bcrypt';
 
 const MAX_INT_32 = Math.pow(2, 31) - 1;
 const MIN_INT_32 = Math.pow(2, 31) * -1;
@@ -63,7 +64,13 @@ const validatePassword = (password) => {
     if (!/[!@#$%^&*\-_=+\\|?/,.;:'"`~\[\]{}<>]+/.test(password)) {
         return 'Password must contain at least one special character.';
     }
-    passwordHash = password
+    //https://www.npmjs.com/package/bcrypt
+    bcrypt.hash(password, 10, (err, hash) => passwordHash = hash);
+    return true;
+}
+
+const validatePasswordConfirm = (password) => {
+    if (!bcrypt.compare(password, passwordHash)) return 'Password does not match.';
     return true;
 }
 
@@ -104,7 +111,14 @@ const questions = [
         message: 'Enter your password:',
         validate: validatePassword,
         mask: true
-    }
+    },
+    {
+        type: 'password',
+        name: 'userPasswordConfirm',
+        message: 'Enter your password again:',
+        validate: validatePasswordConfirm,
+        mask: true
+    },
 ];
 
 /**
@@ -137,7 +151,7 @@ const writeToConsole = (answers) => {
         console.log(`The contents of "${answers.fileName}" are:`);
         console.log(data);
     });
-    console.log(`Your password is: ${passwordHash}`);
+    // console.log(`Your password hash is: ${passwordHash}`);
 }
 
 // https://www.npmjs.com/package/inquirer
