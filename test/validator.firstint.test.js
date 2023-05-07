@@ -5,6 +5,13 @@ import {validateFirstInt} from "../validator.js";
 const MAX = 2147483647;
 const MIN = -2147483648;
 
+/**
+ * Tests first integer validation.
+ *
+ * @author Andrew Nguyen
+ * @version 7 May 2023
+ */
+
 test('one digit SUCCESS', () => {
     expect(validateFirstInt('1')).toBe(true);
 });

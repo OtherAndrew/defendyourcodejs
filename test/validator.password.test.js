@@ -2,6 +2,13 @@
 
 import {validatePassword} from "../validator.js";
 
+/**
+ * Tests password validation.
+ *
+ * @author Andrew Nguyen
+ * @version 7 May 2023
+ */
+
 test('password SUCCESS', () => {
     expect(validatePassword('P@ssw0rd')).toBe(true);
 });

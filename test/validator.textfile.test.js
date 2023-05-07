@@ -2,6 +2,13 @@
 
 import {validateTextFile} from "../validator.js";
 
+/**
+ * Tests text file validation.
+ *
+ * @author Andrew Nguyen
+ * @version 7 May 2023
+ */
+
 test('valid file SUCCESS', () => {
     expect(validateTextFile('test.txt')).toBe(true);
 });
@@ -11,8 +18,7 @@ test('valid file dot slash SUCCESS', () => {
 });
 
 test('valid file from root SUCCESS', () => {
-    // @TODO change this on your own machine
-    const path = '/media/andrew/HDD1/Documents/School/SP 23/TCSS 483 - Secure Coding/A4 - Defend Your Code/defendyourcodejs/test.txt'
+    const path = `${process.cwd()}/test.txt`
     expect(validateTextFile(path)).toBe(true);
 });
 

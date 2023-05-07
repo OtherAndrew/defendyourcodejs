@@ -2,6 +2,13 @@
 
 import {validateName} from "../validator.js";
 
+/**
+ * Tests name validation.
+ *
+ * @author Andrew Nguyen
+ * @version 7 May 2023
+ */
+
 test('caps SUCCESS', () => {
     expect(validateName('Andrew')).toBe(true);
 });

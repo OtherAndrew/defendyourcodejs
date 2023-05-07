@@ -2,6 +2,13 @@
 
 import {validatePassword, validatePasswordConfirm} from "../validator.js";
 
+/**
+ * Tests password confirmation validation.
+ *
+ * @author Andrew Nguyen
+ * @version 7 May 2023
+ */
+
 const PASSWORD = 'P@ssw0rd';
 beforeEach(() => {
     validatePassword(PASSWORD);

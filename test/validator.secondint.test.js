@@ -2,6 +2,13 @@
 
 import {validateFirstInt, validateSecondInt} from "../validator.js";
 
+/**
+ * Tests second integer validation.
+ *
+ * @author Andrew Nguyen
+ * @version 7 May 2023
+ */
+
 const MAX = 2147483647;
 const MIN = -2147483648;
 
