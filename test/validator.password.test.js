@@ -31,7 +31,8 @@ test('password min length SUCCESS', () => {
 
 test('password long SUCCESS', () => {
     let password = 'Apassword123*';
-    for (let i = 0; i < 256; i++) password += 'a'
+    const appendLength = 256 - password.length - 1;
+    for (let i = 0; i < appendLength; i++) password += 'a'
     expect(validatePassword(password)).toBe(true);
 });
 
@@ -41,7 +42,15 @@ test('nothing ERROR', () => {
 
 test('too short ERROR', () => {
     expect(validatePassword('P@sw0rd'))
-        .toBe(`Password must be longer than 8 characters.`);
+        .toBe('Password must contain at least 8 characters.');
+});
+
+test('too long ERROR', () => {
+    let password = 'Apassword123*';
+    const appendLength = 256 - password.length;
+    for (let i = 0; i < appendLength; i++) password += 'a';
+    expect(validatePassword(password))
+        .toBe('Password must contain less than 256 characters.');
 });
 
 test('no uppercase ERROR', () => {
