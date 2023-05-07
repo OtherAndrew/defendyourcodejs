@@ -81,7 +81,7 @@ const formatNumber = (num) => new Intl.NumberFormat().format(num);
  */
 const writeToConsole = (answers) => {
     const sum = formatNumber(parseInt(answers.firstInteger) + parseInt(answers.secondInteger));
-    const product = formatNumber( parseInt(answers.firstInteger) * parseInt(answers.secondInteger));
+    const product = formatNumber(parseInt(answers.firstInteger) * parseInt(answers.secondInteger));
     const firstIntOut = formatNumber(answers.firstInteger);
     const secondIntOut = formatNumber(answers.secondInteger);
     const fileContents = fs.readFileSync(answers.fileName, 'utf8');

@@ -29,7 +29,7 @@ test('password min length SUCCESS', () => {
     expect(validateAndStorePassword('P@ssw0rd')).toBe(true);
 });
 
-test('password long SUCCESS', () => {
+test('password max length SUCCESS', () => {
     let password = 'Apassword123*';
     const appendLength = 256 - password.length - 1;
     for (let i = 0; i < appendLength; i++) password += 'a'
