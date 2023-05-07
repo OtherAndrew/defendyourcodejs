@@ -43,7 +43,7 @@ const validateInt = (num) => /^-?\d+$/.test(num);
  * @param num The input number.
  * @return {boolean} If the input is within range.
  */
-const validateRange = (num) => num >= MIN_INT_32 && num <= MAX_INT_32;
+const validateRange = (num) => parseInt(num) >= MIN_INT_32 && parseInt(num) <= MAX_INT_32;
 
 /**
  * Validates a given integer. An integer may only consist of numeric characters and is within the range of a 4 byte int
