@@ -6,10 +6,10 @@ const MAX_INT_32 = Math.pow(2, 31) - 1;
 const MIN_INT_32 = Math.pow(2, 31) * -1;
 const MIN_PASSWORD_LENGTH = 8;
 const MAX_PASSWORD_LENGTH = 50;
+const SALT_ROUNDS = 10;
 
 let firstInt;
 let passwordHash;
-let salt;
 
 const validateName = (name) => {
     if (!/^[a-zA-Z]{1,50}$/.test(name)) {
@@ -17,8 +17,6 @@ const validateName = (name) => {
     }
     return true;
 }
-
-const clamp = (num, min, max) => Math.max(min, Math.min(num, max));
 
 const validateInt = (num) => /^\d+$/.test(num) && num >= MIN_INT_32 && num <= MAX_INT_32;
 
@@ -65,12 +63,12 @@ const validatePassword = (password) => {
         return 'Password must contain at least one special character.';
     }
     //https://www.npmjs.com/package/bcrypt
-    bcrypt.hash(password, 10, (err, hash) => passwordHash = hash);
+    passwordHash = bcrypt.hashSync(password, SALT_ROUNDS);
     return true;
 }
 
 const validatePasswordConfirm = (password) => {
-    if (!bcrypt.compare(password, passwordHash)) return 'Password does not match.';
+    if (!bcrypt.compareSync(password, passwordHash)) return 'Password does not match.';
     return true;
 }
 
@@ -138,7 +136,7 @@ const writeToConsole = (answers) => {
 
     console.log();
     console.log(`Hello, ${answers.firstName} ${answers.lastName}.`);
-    console.log(`Your two integers are ${firstIntOut} and ${secondIntOut}.`);
+    console.log(`Your integers are ${firstIntOut} and ${secondIntOut}.`);
     console.log(`The sum of ${firstIntOut} and ${secondIntOut} is ${sum}.`);
     console.log(`The product of ${firstIntOut} and ${secondIntOut} is ${product}.`);
     // https://nodejs.dev/en/learn/reading-files-with-nodejs/
