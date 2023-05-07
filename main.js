@@ -28,7 +28,7 @@ const validateName = (name) => {
         return 'Please input a valid name (alphabetic characters, 50 characters max).';
     }
     return true;
-}
+};
 
 /**
  * Validates a given integer. An integer may only consist of numeric characters and is within the range of a 4 byte int
@@ -51,7 +51,7 @@ const validateFirstInt = (num) => {
     }
     firstInt = inputNum;
     return true;
-}
+};
 
 /**
  * Validates a given integer. An integer may only consist of numeric characters and is within the range of a 4 byte int
@@ -65,14 +65,14 @@ const validateSecondInt = (num) => {
         return 'Please input an integer that will not cause overflow or underflow when added or multiplied with the first integer (max of 2^31 - 1, min of -2^31).';
     }
     return true;
-}
+};
 
 /**
  * Formats a number with an absolute value in the thousands with commas.
  * @param num The number to format.
  * @return {string} The number formatted with commas.
  */
-const formatNumber = (num) => new Intl.NumberFormat().format(num)
+const formatNumber = (num) => new Intl.NumberFormat().format(num);
 
 /**
  * Validates a given file name. A file name is valid if it ends in ".txt" and it exists.
@@ -84,7 +84,7 @@ const validateTextFile = (filename) => {
     if (!/^.*\.txt$/.test(filename)) return 'Please input a valid file name (.txt files only).';
     if (!fs.existsSync(filename)) return `"${filename}" does not exist.`;
     return true;
-}
+};
 
 /**
  * Validates a given password. A password is valid if it contains:
@@ -116,7 +116,7 @@ const validatePassword = (password) => {
     //https://www.npmjs.com/package/bcrypt
     passwordHash = bcrypt.hashSync(password, SALT_ROUNDS);
     return true;
-}
+};
 
 /**
  * Confirms a given password. A password will be confirmed if the hash matches that of the first password.
@@ -126,7 +126,7 @@ const validatePassword = (password) => {
 const validatePasswordConfirm = (password) => {
     if (!bcrypt.compareSync(password, passwordHash)) return 'Password does not match.';
     return true;
-}
+};
 
 const questions = [
     {
@@ -212,7 +212,7 @@ const writeToConsole = (answers) => {
  */
 const writeToFile = (answers) => {
     const sum = formatNumber(parseInt(answers.firstInteger) + parseInt(answers.secondInteger));
-    const product = formatNumber( parseInt(answers.firstInteger) * parseInt(answers.secondInteger));
+    const product = formatNumber(parseInt(answers.firstInteger) * parseInt(answers.secondInteger));
     const firstIntOut = formatNumber(answers.firstInteger);
     const secondIntOut = formatNumber(answers.secondInteger);
     const outputFileName = `output/${answers.lastName}_${answers.firstName}_${Date.now()}.txt`;
@@ -227,7 +227,7 @@ const writeToFile = (answers) => {
         `Input file name: ${answers.fileName}`,
         `Contents of ${answers.fileName}:`,
         inputFileContents
-    ]
+    ];
     //https://nodejs.dev/en/learn/writing-files-with-nodejs/
     fs.writeFileSync(outputFileName, outputFileContents.join('\n'));
     console.log(`Saved results to: ${outputFileName}`);
