@@ -18,12 +18,12 @@ let firstInt;
 let passwordHash;
 
 /**
- * Validates a given name. A name may only consist of up to 50 alphabetic characters.
+ * Validates a given name. A name may only consist of up to 50 alphabetic characters, dashes or apostrophes.
  * @param name The input name.
  * @return {boolean|string} Error message if invalid, true if valid.
  */
 export const validateName = (name) => {
-    if (!/^[a-zA-Z]{1,50}$/.test(name)) {
+    if (!/^[a-zA-Z'-]{1,50}$/.test(name)) {
         return 'Please input a valid name (alphabetic characters, 50 characters max).';
     }
     return true;
