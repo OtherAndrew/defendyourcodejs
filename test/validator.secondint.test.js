@@ -31,7 +31,7 @@ test('max value SUCCESS', () => {
     const sqrtMax = Math.floor(Math.sqrt(MAX));
     validateFirstInt(sqrtMax)
     expect(validateSecondInt(-sqrtMax)).toBe(true);
-})
+});
 
 test('zero and zero SUCCESS', () => {
     validateFirstInt(0);
