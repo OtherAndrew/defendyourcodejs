@@ -30,12 +30,20 @@ export const validateName = (name) => {
 };
 
 /**
- * Validates a given integer. An integer may only consist of numeric characters and is within the range of a 4 byte int
+ * Validates a given integer for form. An integer may only consist of numeric characters with
+ * or without minus at the start.
+ * @param num The input number.
+ * @return {boolean} If the input is an integer.
+ */
+const validateInt = (num) => /^-?\d+$/.test(num);
+
+/**
+ * Validates a given integer for range. An integer must be within the range of a 4 byte int
  * (-2^31 <= num <= 2^31 - 1).
  * @param num The input number.
- * @return {boolean} if the input is an integer and within range.
+ * @return {boolean} If the input is within range.
  */
-const validateInt = (num) => /^\d+$/.test(num) && num >= MIN_INT_32 && num <= MAX_INT_32;
+const validateRange = (num) => num >= MIN_INT_32 && num <= MAX_INT_32;
 
 /**
  * Validates a given integer. An integer may only consist of numeric characters and is within the range of a 4 byte int
@@ -44,11 +52,10 @@ const validateInt = (num) => /^\d+$/.test(num) && num >= MIN_INT_32 && num <= MA
  * @return {boolean|string} Error message if invalid, true if valid.
  */
 export const validateFirstInt = (num) => {
-    const inputNum = parseInt(num);
-    if (!validateInt(inputNum)) {
+    if (!validateInt(num) || !validateRange(num)) {
         return 'Please input a valid integer (max of 2^31 - 1, min of -2^31).';
     }
-    firstInt = inputNum;
+    firstInt = parseInt(num);
     return true;
 };
 
@@ -59,8 +66,11 @@ export const validateFirstInt = (num) => {
  * @return {boolean|string} Error message if invalid, true if valid.
  */
 export const validateSecondInt = (num) => {
+    if (!validateInt(num)) {
+        return 'Please input a valid integer (max of 2^31 - 1, min of -2^31).';
+    }
     const inputNum = parseInt(num);
-    if (!validateInt(inputNum) || !validateInt(firstInt + num) || !validateInt(firstInt * num)) {
+    if (!validateRange(firstInt + inputNum) || !validateRange(firstInt * inputNum)) {
         return 'Please input an integer that will not cause overflow or underflow when added or multiplied with the first integer (max of 2^31 - 1, min of -2^31).';
     }
     return true;
