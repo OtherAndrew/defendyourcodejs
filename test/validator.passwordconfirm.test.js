@@ -1,6 +1,6 @@
 // noinspection JSUnresolvedFunction
 
-import {validatePassword, validatePasswordConfirm} from "../validator.js";
+import {validateAndStorePassword, validatePasswordConfirm} from "../validator.js";
 
 /**
  * Tests password confirmation validation.
@@ -11,7 +11,7 @@ import {validatePassword, validatePasswordConfirm} from "../validator.js";
 
 const PASSWORD = 'P@ssw0rd';
 beforeEach(() => {
-    validatePassword(PASSWORD);
+    validateAndStorePassword(PASSWORD);
 });
 
 test('password match SUCCESS', () => {

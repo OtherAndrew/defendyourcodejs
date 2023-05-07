@@ -1,6 +1,6 @@
 // noinspection JSUnresolvedFunction
 
-import {validatePassword} from "../validator.js";
+import {validateAndStorePassword} from "../validator.js";
 
 /**
  * Tests password validation.
@@ -10,38 +10,38 @@ import {validatePassword} from "../validator.js";
  */
 
 test('password SUCCESS', () => {
-    expect(validatePassword('P@ssw0rd')).toBe(true);
+    expect(validateAndStorePassword('P@ssw0rd')).toBe(true);
 });
 
 test('password with space SUCCESS', () => {
-    expect(validatePassword('A password123*')).toBe(true);
+    expect(validateAndStorePassword('A password123*')).toBe(true);
 });
 
 test('password with underscore SUCCESS', () => {
-    expect(validatePassword('A_password123')).toBe(true);
+    expect(validateAndStorePassword('A_password123')).toBe(true);
 });
 
 test('password most caps SUCCESS', () => {
-    expect(validatePassword('PASSWORD_123a')).toBe(true);
+    expect(validateAndStorePassword('PASSWORD_123a')).toBe(true);
 });
 
 test('password min length SUCCESS', () => {
-    expect(validatePassword('P@ssw0rd')).toBe(true);
+    expect(validateAndStorePassword('P@ssw0rd')).toBe(true);
 });
 
 test('password long SUCCESS', () => {
     let password = 'Apassword123*';
     const appendLength = 256 - password.length - 1;
     for (let i = 0; i < appendLength; i++) password += 'a'
-    expect(validatePassword(password)).toBe(true);
+    expect(validateAndStorePassword(password)).toBe(true);
 });
 
 test('nothing ERROR', () => {
-    expect(validatePassword('')).not.toBe(true);
+    expect(validateAndStorePassword('')).not.toBe(true);
 });
 
 test('too short ERROR', () => {
-    expect(validatePassword('P@sw0rd'))
+    expect(validateAndStorePassword('P@sw0rd'))
         .toBe('Password must contain at least 8 characters.');
 });
 
@@ -49,26 +49,26 @@ test('too long ERROR', () => {
     let password = 'Apassword123*';
     const appendLength = 256 - password.length;
     for (let i = 0; i < appendLength; i++) password += 'a';
-    expect(validatePassword(password))
+    expect(validateAndStorePassword(password))
         .toBe('Password must contain less than 256 characters.');
 });
 
 test('no uppercase ERROR', () => {
-    expect(validatePassword('p@ssw0rd'))
+    expect(validateAndStorePassword('p@ssw0rd'))
         .toBe('Password must contain at least one uppercase letter.');
 });
 
 test('no lowercase ERROR', () => {
-    expect(validatePassword('P@SSW0RD'))
+    expect(validateAndStorePassword('P@SSW0RD'))
         .toBe('Password must contain at least one lowercase letter.');
 });
 
 test('no number ERROR', () => {
-    expect(validatePassword('P@ssword'))
+    expect(validateAndStorePassword('P@ssword'))
         .toBe('Password must contain at least one number.');
 });
 
 test('no special character ERROR', () => {
-    expect(validatePassword('Passw0rd'))
+    expect(validateAndStorePassword('Passw0rd'))
         .toBe('Password must contain at least one special character.');
 });

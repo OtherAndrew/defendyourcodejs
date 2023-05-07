@@ -3,7 +3,7 @@ import * as fs from "fs";
 import {
     validateFirstInt,
     validateName,
-    validatePassword,
+    validateAndStorePassword,
     validatePasswordConfirm,
     validateSecondInt,
     validateTextFile
@@ -51,7 +51,7 @@ const questions = [
         type: 'password',
         name: 'userPassword',
         message: 'Enter your password:',
-        validate: validatePassword,
+        validate: validateAndStorePassword,
         mask: true
     },
     {

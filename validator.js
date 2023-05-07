@@ -100,7 +100,7 @@ export const validateTextFile = (filename) => {
  * @param password The input password.
  * @return {boolean|string} Error message if invalid, true if valid.
  */
-export const validatePassword = (password) => {
+export const validateAndStorePassword = (password) => {
     if (password.length < MIN_PASSWORD_LENGTH) {
         return `Password must contain at least ${MIN_PASSWORD_LENGTH} characters.`;
     }
