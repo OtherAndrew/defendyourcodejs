@@ -1,11 +1,14 @@
 import inquirer from 'inquirer';
-import { input } from '@inquirer/prompts';
 import * as fs from "fs";
 
 const MAX_INT_32 = Math.pow(2, 31) - 1;
 const MIN_INT_32 = Math.pow(2, 31) * -1;
+const MIN_PASSWORD_LENGTH = 8;
+const MAX_PASSWORD_LENGTH = 50;
 
 let firstInt;
+let passwordHash;
+let salt;
 
 const validateName = (name) => {
     if (!/^[a-zA-Z]{1,50}$/.test(name)) {
@@ -44,61 +47,103 @@ const validateTextFile = (filename) => {
     return true;
 }
 
+const validatePassword = (password) => {
+    if (password.length <= MIN_PASSWORD_LENGTH) {
+        return `Password must be longer than ${MIN_PASSWORD_LENGTH} characters.`;
+    }
+    if (password.length > MAX_PASSWORD_LENGTH) {
+        return `Password must be shorter than ${MAX_PASSWORD_LENGTH} characters.`;
+    }
+    if (!/[A-Z]+/.test(password)) {
+        return 'Password must contain at least one capital letter.';
+    }
+    if (!/\d+/.test(password)) {
+        return 'Password must contain at least one number.';
+    }
+    if (!/[!@#$%^&*\-_=+\\|?/,.;:'"`~\[\]{}<>]+/.test(password)) {
+        return 'Password must contain at least one special character.';
+    }
+    passwordHash = password
+    return true;
+}
+
+const questions = [
+    {
+        type: 'input',
+        name: 'firstName',
+        message: 'Enter your first name:',
+        validate: validateName
+    },
+    {
+        type: 'input',
+        name: 'lastName',
+        message: 'Enter your last name:',
+        validate: validateName
+    },
+    {
+        type: 'input',
+        name: 'firstInteger',
+        message: 'Enter your first integer:',
+        validate: validateFirstInt
+    },
+    {
+        type: 'input',
+        name: 'secondInteger',
+        message: 'Enter your second integer:',
+        validate: validateSecondInt
+    },
+    {
+        type: 'input',
+        name: 'fileName',
+        message: 'Input the file name of your text file:',
+        validate: validateTextFile
+    },
+    {
+        type: 'password',
+        name: 'userPassword',
+        message: 'Enter your password:',
+        validate: validatePassword,
+        mask: true
+    }
+];
+
+/**
+ * Echos user input to console.
+ * @param answers user input.
+ * @param answers.firstName the user's first name.
+ * @param answers.lastName the user's last name.
+ * @param answers.firstInteger the first integer the user provided.
+ * @param answers.secondInteger the last integer the user provided.
+ * @param answers.fileName the file name the user provided.
+ */
+const writeToConsole = (answers) => {
+    const sum = formatNumber(parseInt(answers.firstInteger) + parseInt(answers.secondInteger));
+    const product = formatNumber( parseInt(answers.firstInteger) * parseInt(answers.secondInteger));
+    const firstIntOut = formatNumber(answers.firstInteger);
+    const secondIntOut = formatNumber(answers.secondInteger);
+
+    console.log();
+    console.log(`Hello, ${answers.firstName} ${answers.lastName}.`);
+    console.log(`Your two integers are ${firstIntOut} and ${secondIntOut}.`);
+    console.log(`The sum of ${firstIntOut} and ${secondIntOut} is ${sum}.`);
+    console.log(`The product of ${firstIntOut} and ${secondIntOut} is ${product}.`);
+    // https://nodejs.dev/en/learn/reading-files-with-nodejs/
+    fs.readFile(answers.fileName, 'utf8', (err, data) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+        console.log(`The text file you chose is "${answers.fileName}".`);
+        console.log(`The contents of "${answers.fileName}" are:`);
+        console.log(data);
+    });
+    console.log(`Your password is: ${passwordHash}`);
+}
+
 // https://www.npmjs.com/package/inquirer
 inquirer
-    .prompt([
-        {
-            type: input,
-            name: 'firstName',
-            message: 'Enter your first name:',
-            validate: validateName
-        },
-        {
-            type: input,
-            name: 'lastName',
-            message: 'Enter your last name:',
-            validate: validateName
-        },
-        {
-            type: input,
-            name: 'firstInteger',
-            message: 'Enter your first integer:',
-            validate: validateFirstInt
-        },
-        {
-            type: input,
-            name: 'secondInteger',
-            message: 'Enter your second integer:',
-            validate: validateSecondInt
-        },
-        {
-            type: input,
-            name: 'fileName',
-            message: 'Input the file name of your text file:',
-            validate: validateTextFile
-        }
-    ])
+    .prompt(questions)
     .then((answers) => {
-        const sum = formatNumber(
-            parseInt(answers['firstInteger']) + parseInt(answers['secondInteger']));
-        const product = formatNumber(
-            parseInt(answers['firstInteger']) * parseInt(answers['secondInteger']));
-        const firstIntOut = formatNumber(answers['firstInteger']);
-        const secondIntOut = formatNumber(answers['secondInteger']);
-
-        console.log();
-        console.log(`Hello, ${answers['firstName']} ${answers['lastName']}.`);
-        console.log(`Your two integers are ${firstIntOut} and ${secondIntOut}.`);
-        console.log(`The sum of ${firstIntOut} and ${secondIntOut} is ${sum}.`);
-        console.log(`The product of ${firstIntOut} and ${secondIntOut} is ${product}.`);
-        console.log(`The text file you chose is "${answers['fileName']}".`);
-        console.log(`The contents of "${answers['fileName']}" are:`);
-        // https://nodejs.dev/en/learn/reading-files-with-nodejs/
-        fs.readFile(answers['fileName'], 'utf8', (err, data) => {
-            if (err) {
-                console.error(err);
-                return;
-            }
-            console.log(data);
-        });
+        writeToConsole(answers);
+        //writeToFile(answers);
     });
