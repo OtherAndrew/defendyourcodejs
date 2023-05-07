@@ -10,7 +10,7 @@ import {
 } from "./validator.js";
 
 /**
- * DefendYourCodeJS
+ * Main is the CLI front end for DefendYourCodeJS.
  *
  * @author Andrew Nguyen
  * @version 7 May 2023
