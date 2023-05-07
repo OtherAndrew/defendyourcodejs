@@ -11,7 +11,6 @@ import bcrypt from "bcrypt";
 const MAX_INT_32 = Math.pow(2, 31) - 1;
 const MIN_INT_32 = Math.pow(2, 31) * -1;
 const MIN_PASSWORD_LENGTH = 8;
-const MAX_PASSWORD_LENGTH = 50;
 const SALT_ROUNDS = 10;
 
 let firstInt;
@@ -90,9 +89,9 @@ export const validateTextFile = (filename) => {
 
 /**
  * Validates a given password. A password is valid if it contains:
- * - more than 8 characters
- * - less than 50 characters
- * - at least one capital letter
+ * - at least 8 characters
+ * - at least one uppercase letter
+ * - at least one lowercase letter
  * - at least one number
  * - at least one special character
  * Will also store the password hash if successful.
@@ -100,14 +99,14 @@ export const validateTextFile = (filename) => {
  * @return {boolean|string} Error message if invalid, true if valid.
  */
 export const validatePassword = (password) => {
-    if (password.length <= MIN_PASSWORD_LENGTH) {
+    if (password.length < MIN_PASSWORD_LENGTH) {
         return `Password must be longer than ${MIN_PASSWORD_LENGTH} characters.`;
     }
-    if (password.length > MAX_PASSWORD_LENGTH) {
-        return `Password must be shorter than ${MAX_PASSWORD_LENGTH} characters.`;
-    }
     if (!/[A-Z]+/.test(password)) {
-        return 'Password must contain at least one capital letter.';
+        return 'Password must contain at least one uppercase letter.';
+    }
+    if (!/[a-z]+/.test(password)) {
+        return 'Password must contain at least one lowercase letter.';
     }
     if (!/\d+/.test(password)) {
         return 'Password must contain at least one number.';
