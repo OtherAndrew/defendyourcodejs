@@ -2,6 +2,13 @@ import inquirer from 'inquirer';
 import * as fs from "fs";
 import bcrypt from 'bcrypt';
 
+/**
+ * DefendYourCodeJS
+ *
+ * @author Andrew Nguyen
+ * @version 7 May 2023
+ */
+
 const MAX_INT_32 = Math.pow(2, 31) - 1;
 const MIN_INT_32 = Math.pow(2, 31) * -1;
 const MIN_PASSWORD_LENGTH = 8;
@@ -55,8 +62,7 @@ const validateFirstInt = (num) => {
 const validateSecondInt = (num) => {
     const inputNum = parseInt(num);
     if (!validateInt(inputNum) || !validateInt(firstInt + num) || !validateInt(firstInt * num)) {
-        return 'Please input an integer that will not cause overflow or underflow when added or multiplied with' +
-            + ' the first integer inputted (max of 2^31 - 1, min of -2^31).';
+        return 'Please input an integer that will not cause overflow or underflow when added or multiplied with the first integer (max of 2^31 - 1, min of -2^31).';
     }
     return true;
 }
@@ -87,6 +93,7 @@ const validateTextFile = (filename) => {
  * - at least one capital letter
  * - at least one number
  * - at least one special character
+ * Will also store the password hash if successful.
  * @param password The input password.
  * @return {boolean|string} Error message if invalid, true if valid.
  */
@@ -218,7 +225,7 @@ const writeToFile = (answers) => {
         `Sum: ${sum}`,
         `Product: ${product}`,
         `Input file name: ${answers.fileName}`,
-        `Contents of "${answers.fileName}":`,
+        `Contents of ${answers.fileName}:`,
         inputFileContents
     ]
     //https://nodejs.dev/en/learn/writing-files-with-nodejs/
