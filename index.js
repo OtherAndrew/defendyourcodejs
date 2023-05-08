@@ -19,6 +19,7 @@ import bcrypt from "bcrypt";
  */
 
 const SALT_ROUNDS = 10;
+const OUTPUT_DIRECTORY = 'output';
 const questions = [
     {
         type: 'input',
@@ -86,11 +87,12 @@ const formatNumber = (num) => new Intl.NumberFormat().format(num);
  * @return {string} the output file name.
  */
 const writeToFile = (answers) => {
+    if (!fs.existsSync(OUTPUT_DIRECTORY)) fs.mkdirSync(OUTPUT_DIRECTORY);
     const sum = formatNumber(parseInt(answers.firstInteger) + parseInt(answers.secondInteger));
     const product = formatNumber(parseInt(answers.firstInteger) * parseInt(answers.secondInteger));
     const firstIntOut = formatNumber(answers.firstInteger);
     const secondIntOut = formatNumber(answers.secondInteger);
-    const outputFileName = `output/${answers.outputFileName}`;
+    const outputFileName = `${OUTPUT_DIRECTORY}/${answers.outputFileName}`;
     const inputFileContents = fs.readFileSync(answers.inputFileName, 'utf8');
     const outputFileContents = [
         `First name: ${answers.firstName}`,
@@ -143,10 +145,9 @@ inquirer
     .prompt(questions)
     .then((answers) => {
         const outputFile = writeToFile(answers);
-        const confirmPassword = (password) => {
-            const file = fs.readFileSync(outputFile, 'utf8').split('\n');
-            return validatePasswordConfirm(password, file[file.length - 1]);
-        };
+        const file = fs.readFileSync(outputFile, 'utf8').split('\n');
+        const hash = file[file.length - 1];
+        const confirmPassword = (password) => validatePasswordConfirm(password, hash);
         inquirer
             .prompt({
                 type: 'password',
