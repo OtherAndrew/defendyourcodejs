@@ -38,6 +38,10 @@ node index.js
 npm test
 ```
 
+### Error logging
+
+Invalid inputs are logged to `error.log`.
+
 ## Authors
 
 [Andrew Nguyen](https://github.com/OtherAndrew)
