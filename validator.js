@@ -89,7 +89,7 @@ export const validateSecondInt = (num) => {
  * Validates a given file input name. A file name is valid if it:
  * - ends in ".txt"
  * - does not contain reserved characters
- * - is in the same directory as main.js
+ * - is in the same directory as index.js
  * @param filename The input file name.
  * @return {boolean|string} Error message if invalid, true if valid.
  */
