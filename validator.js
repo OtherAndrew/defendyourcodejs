@@ -97,7 +97,7 @@ export const validateSecondInt = (num) => {
 export const validateInputTextFile = (filename) => {
     if (!/\.txt$/.test(filename) || !isValidFilename(filename)) {
         fs.appendFileSync('error.log', `[${timestamp()}] INVALID INPUT FILE: ${filename}\n`);
-        return 'Please input a valid file name (.txt files only).';
+        return 'Please input a valid file name (.txt files only, no reserved characters).';
     }
     if (!fs.existsSync(filename)) {
         fs.appendFileSync('error.log', `[${timestamp()}] FILE DOES NOT EXIST: ${filename}\n`);
@@ -117,7 +117,7 @@ export const validateInputTextFile = (filename) => {
 export const validateOutputTextFile = (filename) => {
     if (!/\.txt$/.test(filename) || !isValidFilename(filename) || /\.\./.test(filename)) {
         fs.appendFileSync('error.log', `[${timestamp()}] INVALID INPUT FILE: ${filename}\n`);
-        return 'Please input a valid file name (.txt files only).';
+        return 'Please input a valid file name (.txt files only, no reserved characters).';
     }
     if (fs.existsSync(`output/${filename}`)) {
         fs.appendFileSync('error.log', `[${timestamp()}] FILE ALREADY EXISTS: ${filename}\n`);
