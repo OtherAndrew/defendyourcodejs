@@ -43,7 +43,7 @@ const questions = [
     },
     {
         type: 'input',
-        name: 'fileName',
+        name: 'inputFileName',
         message: 'Input the file name of your text file:',
         validate: validateTextFile
     },
@@ -77,22 +77,22 @@ const formatNumber = (num) => new Intl.NumberFormat().format(num);
  * @param answers.lastName the user's last name.
  * @param answers.firstInteger the first integer the user provided.
  * @param answers.secondInteger the last integer the user provided.
- * @param answers.fileName the file name the user provided.
+ * @param answers.inputFileName the file name the user provided.
  */
 const writeToConsole = (answers) => {
     const sum = formatNumber(parseInt(answers.firstInteger) + parseInt(answers.secondInteger));
     const product = formatNumber(parseInt(answers.firstInteger) * parseInt(answers.secondInteger));
     const firstIntOut = formatNumber(answers.firstInteger);
     const secondIntOut = formatNumber(answers.secondInteger);
-    const fileContents = fs.readFileSync(answers.fileName, 'utf8');
+    const fileContents = fs.readFileSync(answers.inputFileName, 'utf8');
 
     console.log();
     console.log(`Hello, ${answers.firstName} ${answers.lastName}.`);
     console.log(`Your integers are ${firstIntOut} and ${secondIntOut}.`);
     console.log(`The sum of ${firstIntOut} and ${secondIntOut} is ${sum}.`);
     console.log(`The product of ${firstIntOut} and ${secondIntOut} is ${product}.`);
-    console.log(`The text file you chose is "${answers.fileName}".`);
-    console.log(`The contents of "${answers.fileName}" are:`);
+    console.log(`The text file you chose is "${answers.inputFileName}".`);
+    console.log(`The contents of "${answers.inputFileName}" are:`);
     console.log(fileContents);
 }
 
@@ -103,7 +103,7 @@ const writeToConsole = (answers) => {
  * @param answers.lastName the user's last name.
  * @param answers.firstInteger the first integer the user provided.
  * @param answers.secondInteger the last integer the user provided.
- * @param answers.fileName the file name the user provided.
+ * @param answers.inputFileName the file name the user provided.
  */
 const writeToFile = (answers) => {
     const sum = formatNumber(parseInt(answers.firstInteger) + parseInt(answers.secondInteger));
@@ -111,7 +111,7 @@ const writeToFile = (answers) => {
     const firstIntOut = formatNumber(answers.firstInteger);
     const secondIntOut = formatNumber(answers.secondInteger);
     const outputFileName = `output/${answers.lastName}_${answers.firstName}_${Date.now()}.txt`;
-    const inputFileContents = fs.readFileSync(answers.fileName, 'utf8');
+    const inputFileContents = fs.readFileSync(answers.inputFileName, 'utf8');
     const outputFileContents = [
         `First name: ${answers.firstName}`,
         `Last name: ${answers.lastName}`,
@@ -119,8 +119,8 @@ const writeToFile = (answers) => {
         `Second integer: ${secondIntOut}`,
         `Sum: ${sum}`,
         `Product: ${product}`,
-        `Input file name: ${answers.fileName}`,
-        `Contents of ${answers.fileName}:`,
+        `Input file name: ${answers.inputFileName}`,
+        `Contents of ${answers.inputFileName}:`,
         inputFileContents
     ];
     //https://nodejs.dev/en/learn/writing-files-with-nodejs/
