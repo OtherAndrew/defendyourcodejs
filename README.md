@@ -9,6 +9,7 @@ A simple CLI program meant to demonstrate input validation, written in JavaScrip
 * [Node.js](https://nodejs.org/en) 18.13.0
 * [bcrypt](https://www.npmjs.com/package/bcrypt) 5.1.0
 * [inquirer](https://www.npmjs.com/package/inquirer) 9.2.2
+* [valid-filename](https://www.npmjs.com/package/valid-filename) 4.0.0
 * [jest](https://www.npmjs.com/package/jest) 29.5.0 (only for unit testing)
 
 ### Installing
