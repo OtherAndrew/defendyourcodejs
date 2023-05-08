@@ -1,6 +1,6 @@
 # DefendYourCodeJS
 
-A simple CLI program meant to demonstrate input validation, written in JavaScript.
+A simple CLI program meant to demonstrate input validation and password salting and hashing, written in JavaScript.
 
 ## Getting Started
 
