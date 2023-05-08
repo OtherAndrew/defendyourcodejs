@@ -2,12 +2,14 @@ import inquirer from 'inquirer';
 import * as fs from "fs";
 import {
     validateFirstInt,
+    validateInputTextFile,
     validateName,
-    validateAndStorePassword,
+    validateOutputTextFile,
+    validatePassword,
     validatePasswordConfirm,
     validateSecondInt,
-    validateInputTextFile, validateOutputTextFile, getHash
 } from "./validator.js";
+import bcrypt from "bcrypt";
 
 /**
  * Main is the CLI front end for DefendYourCodeJS.
@@ -16,6 +18,7 @@ import {
  * @version 7 May 2023
  */
 
+const SALT_ROUNDS = 10;
 const questions = [
     {
         type: 'input',
@@ -58,14 +61,7 @@ const questions = [
         type: 'password',
         name: 'userPassword',
         message: 'Enter your password:',
-        validate: validateAndStorePassword,
-        mask: true
-    },
-    {
-        type: 'password',
-        name: 'userPasswordConfirm',
-        message: 'Enter your password again:',
-        validate: validatePasswordConfirm,
+        validate: validatePassword,
         mask: true
     },
 ];
@@ -76,6 +72,45 @@ const questions = [
  * @return {string} The number formatted with commas.
  */
 const formatNumber = (num) => new Intl.NumberFormat().format(num);
+
+/**
+ * Writes user input to file.
+ * @param answers user input.
+ * @param answers.firstName the user's first name.
+ * @param answers.lastName the user's last name.
+ * @param answers.firstInteger the first integer the user provided.
+ * @param answers.secondInteger the last integer the user provided.
+ * @param answers.inputFileName the input file name the user provided.
+ * @param answers.outputFileName the output file name the user provided.
+ * @param answers.userPassword the password the user provided.
+ * @return {string} the output file name.
+ */
+const writeToFile = (answers) => {
+    const sum = formatNumber(parseInt(answers.firstInteger) + parseInt(answers.secondInteger));
+    const product = formatNumber(parseInt(answers.firstInteger) * parseInt(answers.secondInteger));
+    const firstIntOut = formatNumber(answers.firstInteger);
+    const secondIntOut = formatNumber(answers.secondInteger);
+    const outputFileName = `output/${answers.outputFileName}`;
+    const inputFileContents = fs.readFileSync(answers.inputFileName, 'utf8');
+    const outputFileContents = [
+        `First name: ${answers.firstName}`,
+        `Last name: ${answers.lastName}`,
+        `First integer: ${firstIntOut}`,
+        `Second integer: ${secondIntOut}`,
+        `Sum: ${sum}`,
+        `Product: ${product}`,
+        `Input file name: ${answers.inputFileName}`,
+        `Contents of ${answers.inputFileName}:`,
+        inputFileContents,
+        `Password hash:`,
+        //https://www.npmjs.com/package/bcrypt
+        bcrypt.hashSync(answers.userPassword, SALT_ROUNDS)
+    ];
+    //https://nodejs.dev/en/learn/writing-files-with-nodejs/
+    fs.writeFileSync(outputFileName, outputFileContents.join('\n'));
+    console.log(`Saved results to: ${outputFileName}`);
+    return outputFileName;
+};
 
 /**
  * Echos user input to console.
@@ -101,48 +136,26 @@ const writeToConsole = (answers) => {
     console.log(`The text file you chose is "${answers.inputFileName}".`);
     console.log(`The contents of "${answers.inputFileName}" are:`);
     console.log(fileContents);
-    console.log(`Your password hash is: ${getHash()}`);
-}
-
-/**
- * Writes user input to file.
- * @param answers user input.
- * @param answers.firstName the user's first name.
- * @param answers.lastName the user's last name.
- * @param answers.firstInteger the first integer the user provided.
- * @param answers.secondInteger the last integer the user provided.
- * @param answers.inputFileName the input file name the user provided.
- * @param answers.outputFileName the output file name the user provided.
- */
-const writeToFile = (answers) => {
-    const sum = formatNumber(parseInt(answers.firstInteger) + parseInt(answers.secondInteger));
-    const product = formatNumber(parseInt(answers.firstInteger) * parseInt(answers.secondInteger));
-    const firstIntOut = formatNumber(answers.firstInteger);
-    const secondIntOut = formatNumber(answers.secondInteger);
-    const outputFileName = `output/${answers.outputFileName}`;
-    const inputFileContents = fs.readFileSync(answers.inputFileName, 'utf8');
-    const outputFileContents = [
-        `First name: ${answers.firstName}`,
-        `Last name: ${answers.lastName}`,
-        `First integer: ${firstIntOut}`,
-        `Second integer: ${secondIntOut}`,
-        `Sum: ${sum}`,
-        `Product: ${product}`,
-        `Input file name: ${answers.inputFileName}`,
-        `Contents of ${answers.inputFileName}:`,
-        inputFileContents,
-        `Password hash:`,
-        getHash()
-    ];
-    //https://nodejs.dev/en/learn/writing-files-with-nodejs/
-    fs.writeFileSync(outputFileName, outputFileContents.join('\n'));
-    console.log(`Saved results to: ${outputFileName}`);
-}
+};
 
 // https://www.npmjs.com/package/inquirer
 inquirer
-    .prompt(questions, () => {})
+    .prompt(questions)
     .then((answers) => {
-        writeToConsole(answers);
-        writeToFile(answers);
+        const outputFile = writeToFile(answers);
+        const confirmPassword = (password) => {
+            const file = fs.readFileSync(outputFile, 'utf8').split('\n');
+            return validatePasswordConfirm(password, file[file.length - 1]);
+        };
+        inquirer
+            .prompt({
+                type: 'password',
+                name: 'userPasswordConfirm',
+                message: 'Enter your password again:',
+                validate: confirmPassword,
+                mask: true
+            })
+            .then(() => {
+                writeToConsole(answers);
+            });
     });

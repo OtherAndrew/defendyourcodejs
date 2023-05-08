@@ -13,10 +13,8 @@ const MAX_INT_32 = Math.pow(2, 31) - 1;
 const MIN_INT_32 = Math.pow(2, 31) * -1;
 const MIN_PASSWORD_LENGTH = 8;
 const MAX_PASSWORD_LENGTH = 256;
-const SALT_ROUNDS = 10;
 
 let firstInt;
-let passwordHash;
 
 /**
  * Validates a given name. A name may only consist of up to 50 alphabetic characters, dashes or apostrophes.
@@ -122,7 +120,7 @@ export const validateOutputTextFile = (filename) => {
  * @param password The input password.
  * @return {boolean|string} Error message if invalid, true if valid.
  */
-export const validateAndStorePassword = (password) => {
+export const validatePassword = (password) => {
     if (password.length < MIN_PASSWORD_LENGTH) {
         return `Password must contain at least ${MIN_PASSWORD_LENGTH} characters.`;
     }
@@ -141,22 +139,17 @@ export const validateAndStorePassword = (password) => {
     if (!/[!@#$%^&*\-_=+\\|?/,.;:'"`~\[\]{}<>]+/.test(password)) {
         return 'Password must contain at least one special character.';
     }
-    //https://www.npmjs.com/package/bcrypt
-    passwordHash = bcrypt.hashSync(password, SALT_ROUNDS);
     return true;
 };
 
 /**
- * Confirms a given password. A password will be confirmed if the hash matches that of the first password.
+ * Checks a password against a hash. The password is valid if its hash matches the hash given.
  * @param password The input confirm password.
+ * @param hash The password hash.
  * @return {boolean|string} Error message if invalid, true if valid.
  */
-export const validatePasswordConfirm = (password) => {
-    if (!bcrypt.compareSync(password, passwordHash)) return 'Password does not match.';
+export const validatePasswordConfirm = (password, hash) => {
+    //https://www.npmjs.com/package/bcrypt
+    if (!bcrypt.compareSync(password, hash)) return 'Password does not match.';
     return true;
 };
-
-/**
- * Returns a copy of the password hash.
- */
-export const getHash = () => passwordHash.slice();

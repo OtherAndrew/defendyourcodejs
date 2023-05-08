@@ -9,10 +9,8 @@ import {validateOutputTextFile} from "../validator.js";
  * @version 7 May 2023
  */
 
-const DEFAULT_FILE_NAME = 'person_guy_1683503877707.txt';
-
 test('default SUCCESS', () => {
-   expect(validateOutputTextFile(DEFAULT_FILE_NAME)).toBe(true);
+   expect(validateOutputTextFile('person_guy_1683503877707.txt')).toBe(true);
 });
 
 test('one letter SUCCESS', () => {
