@@ -32,6 +32,12 @@ npm install
 node index.js
 ```
 
+### Executing tests
+
+```
+npm test
+```
+
 ## Authors
 
 [Andrew Nguyen](https://github.com/OtherAndrew)
