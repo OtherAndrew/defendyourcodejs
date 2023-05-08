@@ -1,6 +1,7 @@
 // noinspection JSUnresolvedFunction
 
 import {validateInputTextFile} from "../validator.js";
+import fs from "fs";
 
 /**
  * Tests input text file validation.
@@ -8,6 +9,22 @@ import {validateInputTextFile} from "../validator.js";
  * @author Andrew Nguyen
  * @version 7 May 2023
  */
+
+beforeAll(() => {
+   fs.writeFileSync('test.txt', 'test');
+   fs.writeFileSync('.hidden.txt', 'hidden');
+   fs.writeFileSync('test file.txt', 'test file');
+   fs.writeFileSync('test.file.txt', 'test.file');
+   fs.writeFileSync('test[file].txt', 'test[file]');
+});
+
+afterAll(() => {
+    fs.unlinkSync('test.txt');
+    fs.unlinkSync('.hidden.txt');
+    fs.unlinkSync('test file.txt');
+    fs.unlinkSync('test.file.txt');
+    fs.unlinkSync('test[file].txt');
+});
 
 test('valid file SUCCESS', () => {
     expect(validateInputTextFile('test.txt')).toBe(true);

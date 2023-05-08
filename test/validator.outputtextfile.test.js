@@ -1,6 +1,7 @@
 // noinspection JSUnresolvedFunction
 
 import {validateOutputTextFile} from "../validator.js";
+import fs from "fs";
 
 /**
  * Tests output text file validation.
@@ -8,6 +9,8 @@ import {validateOutputTextFile} from "../validator.js";
  * @author Andrew Nguyen
  * @version 7 May 2023
  */
+
+const OUTPUT_DIRECTORY = 'output';
 
 test('default SUCCESS', () => {
    expect(validateOutputTextFile('person_guy_1683503877707.txt')).toBe(true);
@@ -53,6 +56,10 @@ test('symbols ERROR', () => {
 
 test('already exists ERROR', () => {
     const filename = 'test.txt';
+    const filenameWithPath = `${OUTPUT_DIRECTORY}/${filename}`;
+    if (!fs.existsSync(OUTPUT_DIRECTORY)) fs.mkdirSync(OUTPUT_DIRECTORY);
+    fs.writeFileSync(filenameWithPath, 'output test');
     expect(validateOutputTextFile(filename))
         .toBe(`"${filename}" already exists.`);
+    fs.unlinkSync(filenameWithPath);
 });
