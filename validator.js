@@ -20,7 +20,7 @@ let firstInt;
  * Returns the current date and time in ISO format.
  * @return {string} the current date and time in ISO format.
  */
-const timestamp = () => (new Date()).toISOString()
+const timestamp = () => (new Date()).toISOString();
 
 /**
  * Validates a given name. A name may only consist of up to 50 alphabetic characters, dashes or apostrophes.
