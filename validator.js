@@ -155,3 +155,8 @@ export const validatePasswordConfirm = (password) => {
     if (!bcrypt.compareSync(password, passwordHash)) return 'Password does not match.';
     return true;
 };
+
+/**
+ * Returns a copy of the password hash.
+ */
+export const getHash = () => passwordHash.slice();

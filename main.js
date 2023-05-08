@@ -6,7 +6,7 @@ import {
     validateAndStorePassword,
     validatePasswordConfirm,
     validateSecondInt,
-    validateInputTextFile, validateOutputTextFile
+    validateInputTextFile, validateOutputTextFile, getHash
 } from "./validator.js";
 
 /**
@@ -101,6 +101,7 @@ const writeToConsole = (answers) => {
     console.log(`The text file you chose is "${answers.inputFileName}".`);
     console.log(`The contents of "${answers.inputFileName}" are:`);
     console.log(fileContents);
+    console.log(`Your password hash is: ${getHash()}`);
 }
 
 /**
@@ -129,7 +130,9 @@ const writeToFile = (answers) => {
         `Product: ${product}`,
         `Input file name: ${answers.inputFileName}`,
         `Contents of ${answers.inputFileName}:`,
-        inputFileContents
+        inputFileContents,
+        `Password hash:`,
+        getHash()
     ];
     //https://nodejs.dev/en/learn/writing-files-with-nodejs/
     fs.writeFileSync(outputFileName, outputFileContents.join('\n'));
