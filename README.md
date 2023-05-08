@@ -25,7 +25,7 @@ npm install
 ### Executing program
 
 ```
-node main.js
+node index.js
 ```
 
 ## Authors
