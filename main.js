@@ -6,7 +6,7 @@ import {
     validateAndStorePassword,
     validatePasswordConfirm,
     validateSecondInt,
-    validateTextFile
+    validateInputTextFile, validateOutputTextFile
 } from "./validator.js";
 
 /**
@@ -44,8 +44,15 @@ const questions = [
     {
         type: 'input',
         name: 'inputFileName',
-        message: 'Input the file name of your text file:',
-        validate: validateTextFile
+        message: 'Input the file name of your input text file:',
+        validate: validateInputTextFile
+    },
+    {
+        type: 'input',
+        name: 'outputFileName',
+        message: 'Input the file name of your output text file:',
+        validate: validateOutputTextFile,
+        default: (answers) => `${answers.lastName}_${answers.firstName}_${Date.now()}.txt`
     },
     {
         type: 'password',
@@ -103,14 +110,15 @@ const writeToConsole = (answers) => {
  * @param answers.lastName the user's last name.
  * @param answers.firstInteger the first integer the user provided.
  * @param answers.secondInteger the last integer the user provided.
- * @param answers.inputFileName the file name the user provided.
+ * @param answers.inputFileName the input file name the user provided.
+ * @param answers.outputFileName the output file name the user provided.
  */
 const writeToFile = (answers) => {
     const sum = formatNumber(parseInt(answers.firstInteger) + parseInt(answers.secondInteger));
     const product = formatNumber(parseInt(answers.firstInteger) * parseInt(answers.secondInteger));
     const firstIntOut = formatNumber(answers.firstInteger);
     const secondIntOut = formatNumber(answers.secondInteger);
-    const outputFileName = `output/${answers.lastName}_${answers.firstName}_${Date.now()}.txt`;
+    const outputFileName = `output/${answers.outputFileName}`;
     const inputFileContents = fs.readFileSync(answers.inputFileName, 'utf8');
     const outputFileContents = [
         `First name: ${answers.firstName}`,

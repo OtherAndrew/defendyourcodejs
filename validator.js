@@ -1,5 +1,6 @@
 import fs from "fs";
 import bcrypt from "bcrypt";
+import isValidFilename from "valid-filename";
 
 /**
  * Validator validates user input.
@@ -77,14 +78,35 @@ export const validateSecondInt = (num) => {
 };
 
 /**
- * Validates a given file name. A file name is valid if it ends in ".txt" and it exists.
+ * Validates a given file input name. A file name is valid if it:
+ * - ends in ".txt"
+ * - does not contain reserved characters
+ * - is in the same directory as main.js
  * @param filename The input file name.
  * @return {boolean|string} Error message if invalid, true if valid.
  */
 // https://stackoverflow.com/questions/71343219/i-want-to-check-if-this-file-in-this-directory-existing-or-not
-export const validateTextFile = (filename) => {
-    if (!/^.*\.txt$/.test(filename)) return 'Please input a valid file name (.txt files only).';
+export const validateInputTextFile = (filename) => {
+    if (!/\.txt$/.test(filename) || !isValidFilename(filename)) {
+        return 'Please input a valid file name (.txt files only).';
+    }
     if (!fs.existsSync(filename)) return `"${filename}" does not exist.`;
+    return true;
+};
+
+/**
+ * Validates a given file input name. A file name is valid if it:
+ * - ends in ".txt"
+ * - does not contain reserved characters
+ * - is not already used for another file in the output directory
+ * @param filename The output file name.
+ * @return {boolean|string} Error message if invalid, true if valid.
+ */
+export const validateOutputTextFile = (filename) => {
+    if (!/\.txt$/.test(filename) || !isValidFilename(filename) || /\.\./.test(filename)) {
+        return 'Please input a valid file name (.txt files only).';
+    }
+    if (fs.existsSync(`output/${filename}`)) return `"${filename}" already exists.`;
     return true;
 };
 
