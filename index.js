@@ -95,6 +95,7 @@ const writeToFile = (answers) => {
     const secondIntOut = formatNumber(answers.secondInteger);
     const outputFileName = `${OUTPUT_DIRECTORY}/${answers.outputFileName}`;
     const inputFileContents = fs.readFileSync(answers.inputFileName, 'utf8');
+
     const outputFileContents = [
         `First name: ${answers.firstName}`,
         `Last name: ${answers.lastName}`,
