@@ -2,6 +2,23 @@
 
 A simple CLI program meant to demonstrate input validation and password salting and hashing, written in JavaScript.
 
+## Description
+
+DefendYourCodeJS defends against:
+
+- Spoofing
+  - The user must confirm the password they input previously.
+- Tampering
+  - Input is validated to defend against:
+    - Code injection
+    - Integer overflow
+- Repudiation
+  - User cannot undo an input once submitted.
+- Information disclosure
+  - User password is stored as a hash.
+- Elevation of privilege
+  - Program can only read and access files in the directory it's in.
+
 ## Getting Started
 
 ### Requirements
@@ -38,9 +55,15 @@ node index.js
 npm test
 ```
 
+## Help
+
 ### Error logging
 
 Invalid inputs are logged to `error.log`.
+
+### Shortcomings
+
+Input files must be in the same directory as `index.js`.
 
 ## Authors
 
