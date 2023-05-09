@@ -108,7 +108,7 @@ export const validateSecondInt = (num) => {
 export const validateInputTextFile = (filename) => {
     if (!/^.+\.txt$/.test(filename) || !isValidFilename(filename)) {
         logError(`INVALID INPUT FILE: "${filename}"`);
-        return 'Please input a valid file name (.txt files only, no reserved characters).';
+        return 'Please input a valid file name (.txt files only, no reserved characters, in same directory as index.js).';
     }
     if (!fs.existsSync(filename)) {
         logError(`FILE DOES NOT EXIST: "${filename}"`);
