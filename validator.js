@@ -13,6 +13,7 @@ const MAX_INT_32 = Math.pow(2, 31) - 1;
 const MIN_INT_32 = Math.pow(2, 31) * -1;
 const MIN_PASSWORD_LENGTH = 8;
 const MAX_PASSWORD_LENGTH = 256;
+const LOG_DIRECTORY = 'logs';
 
 let firstInt;
 
@@ -23,10 +24,14 @@ let firstInt;
 const timestamp = () => (new Date()).toISOString();
 
 /**
- * Logs error message to error.log.
+ * Logs error message to logs/[date]error.log.
  * @param message The error message.
  */
-const logError = (message) => fs.appendFileSync('error.log', `[${timestamp()}] ${message}\n`);
+const logError = (message) => {
+    if (!fs.existsSync(LOG_DIRECTORY)) fs.mkdirSync(LOG_DIRECTORY);
+    const date = timestamp().split('T')[0];
+    fs.appendFileSync(`${LOG_DIRECTORY}/${date}_error.log`, `[${timestamp()}] ${message}\n`);
+}
 
 /**
  * Validates a given name. A name may only consist of up to 50 alphabetic characters, dashes or apostrophes.
@@ -35,7 +40,7 @@ const logError = (message) => fs.appendFileSync('error.log', `[${timestamp()}] $
  */
 export const validateName = (name) => {
     if (!/^[a-zA-Z'-]{1,50}$/.test(name)) {
-        logError(`INVALID NAME: ${name}`);
+        logError(`INVALID NAME: "${name}"`);
         return 'Please input a valid name (alphabetic characters, 50 characters max).';
     }
     return true;
@@ -65,7 +70,7 @@ const validateRange = (num) => parseInt(num) >= MIN_INT_32 && parseInt(num) <= M
  */
 export const validateFirstInt = (num) => {
     if (!validateInt(num) || !validateRange(num)) {
-        logError(`INVALID FIRST INT: ${num}`);
+        logError(`INVALID FIRST INT: "${num}"`);
         return 'Please input a valid integer (max of 2^31 - 1, min of -2^31).';
     }
     firstInt = parseInt(num);
@@ -80,12 +85,12 @@ export const validateFirstInt = (num) => {
  */
 export const validateSecondInt = (num) => {
     if (!validateInt(num)) {
-        logError(`INVALID SECOND INT: ${num}`);
+        logError(`INVALID SECOND INT: "${num}"`);
         return 'Please input a valid integer (max of 2^31 - 1, min of -2^31).';
     }
     const inputNum = parseInt(num);
     if (!validateRange(firstInt * inputNum) || !validateRange(firstInt + inputNum)) {
-        logError(`INVALID SECOND INT OVERFLOW: ${num} (first int: ${firstInt})`);
+        logError(`INVALID SECOND INT OVERFLOW: "${num}" (first int: "${firstInt}")`);
         return 'Please input an integer that will not cause overflow or underflow when added or multiplied with the first integer (max of 2^31 - 1, min of -2^31).';
     }
     return true;
@@ -102,11 +107,11 @@ export const validateSecondInt = (num) => {
 // https://stackoverflow.com/questions/71343219/i-want-to-check-if-this-file-in-this-directory-existing-or-not
 export const validateInputTextFile = (filename) => {
     if (!/^.+\.txt$/.test(filename) || !isValidFilename(filename)) {
-        logError(`INVALID INPUT FILE: ${filename}`);
+        logError(`INVALID INPUT FILE: "${filename}"`);
         return 'Please input a valid file name (.txt files only, no reserved characters).';
     }
     if (!fs.existsSync(filename)) {
-        logError(`FILE DOES NOT EXIST: ${filename}`);
+        logError(`FILE DOES NOT EXIST: "${filename}"`);
         return `"${filename}" does not exist.`;
     }
     return true;
@@ -122,11 +127,11 @@ export const validateInputTextFile = (filename) => {
  */
 export const validateOutputTextFile = (filename) => {
     if (!/^.+\.txt$/.test(filename) || !isValidFilename(filename) || /\.\./.test(filename)) {
-        logError(`INVALID OUTPUT FILE: ${filename}`);
+        logError(`INVALID OUTPUT FILE: "${filename}"`);
         return 'Please input a valid file name (.txt files only, no reserved characters).';
     }
     if (fs.existsSync(`output/${filename}`)) {
-        logError(`FILE ALREADY EXISTS: ${filename}`);
+        logError(`FILE ALREADY EXISTS: "${filename}"`);
         return `"${filename}" already exists.`;
     }
     return true;
@@ -146,27 +151,27 @@ export const validateOutputTextFile = (filename) => {
  */
 export const validatePassword = (password) => {
     if (password.length < MIN_PASSWORD_LENGTH) {
-        logError(`TOO SHORT PASSWORD: ${password}`);
+        logError(`TOO SHORT PASSWORD: "${password}"`);
         return `Password must contain at least ${MIN_PASSWORD_LENGTH} characters.`;
     }
     if (password.length >= MAX_PASSWORD_LENGTH) {
-        logError(`TOO LONG PASSWORD: ${password}`);
+        logError(`TOO LONG PASSWORD: "${password}"`);
         return `Password must contain less than ${MAX_PASSWORD_LENGTH} characters.`;
     }
     if (!/[A-Z]+/.test(password)) {
-        logError(`NO UPPERCASE PASSWORD: ${password}`);
+        logError(`NO UPPERCASE PASSWORD: "${password}"`);
         return 'Password must contain at least one uppercase letter.';
     }
     if (!/[a-z]+/.test(password)) {
-        logError(`NO LOWERCASE PASSWORD: ${password}`);
+        logError(`NO LOWERCASE PASSWORD: "${password}"`);
         return 'Password must contain at least one lowercase letter.';
     }
     if (!/\d+/.test(password)) {
-        logError(`NO NUMBER PASSWORD: ${password}`);
+        logError(`NO NUMBER PASSWORD: "${password}"`);
         return 'Password must contain at least one number.';
     }
     if (!/[!@#$%^&*\-_=+\\|?/,.;:'"`~\[\]{}<>]+/.test(password)) {
-        logError(`NO SPECIAL CHAR PASSWORD: ${password}`);
+        logError(`NO SPECIAL CHAR PASSWORD: "${password}"`);
         return 'Password must contain at least one special character.';
     }
     return true;
@@ -181,7 +186,7 @@ export const validatePassword = (password) => {
 export const validatePasswordConfirm = (password, hash) => {
     //https://www.npmjs.com/package/bcrypt
     if (!bcrypt.compareSync(password, hash)) {
-        logError(`PASSWORD CONFIRM FAIL: ${password}`);
+        logError(`PASSWORD CONFIRM FAIL: "${password}"`);
         return 'Password does not match.';
     }
     return true;

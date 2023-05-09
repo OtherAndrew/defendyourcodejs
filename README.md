@@ -59,7 +59,7 @@ npm test
 
 ### Error logging
 
-Invalid inputs are logged to `error.log`.
+Invalid inputs are logged to `logs/[date]_error.log`.
 
 ### Shortcomings
 
