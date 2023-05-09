@@ -10,7 +10,7 @@ import fs from "fs";
  * @version 7 May 2023
  */
 
-const OUTPUT_DIRECTORY = 'output';
+import { OUTPUT_DIRECTORY } from '../directories.js';
 
 test('default SUCCESS', () => {
    expect(validateOutputTextFile('person_guy_1683503877707.txt')).toBe(true);

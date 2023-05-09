@@ -1,5 +1,7 @@
 import inquirer from 'inquirer';
 import * as fs from "fs";
+import bcrypt from 'bcrypt';
+
 import {
     validateFirstInt,
     validateInputTextFile,
@@ -8,8 +10,8 @@ import {
     validatePassword,
     validatePasswordConfirm,
     validateSecondInt,
-} from "./validator.js";
-import bcrypt from "bcrypt";
+} from './validator.js';
+import { OUTPUT_DIRECTORY } from './directories.js';
 
 /**
  * Main is the CLI front end for DefendYourCodeJS.
@@ -19,7 +21,6 @@ import bcrypt from "bcrypt";
  */
 
 const SALT_ROUNDS = 10;
-const OUTPUT_DIRECTORY = 'output';
 const questions = [
     {
         type: 'input',

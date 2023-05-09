@@ -2,6 +2,8 @@ import fs from "fs";
 import bcrypt from "bcrypt";
 import isValidFilename from "valid-filename";
 
+import { LOG_DIRECTORY, OUTPUT_DIRECTORY } from './directories.js';
+
 /**
  * Validator validates user input.
  *
@@ -13,7 +15,6 @@ const MAX_INT_32 = Math.pow(2, 31) - 1;
 const MIN_INT_32 = Math.pow(2, 31) * -1;
 const MIN_PASSWORD_LENGTH = 8;
 const MAX_PASSWORD_LENGTH = 256;
-const LOG_DIRECTORY = 'logs';
 
 let firstInt;
 
@@ -130,7 +131,7 @@ export const validateOutputTextFile = (filename) => {
         logError(`INVALID OUTPUT FILE: "${filename}"`);
         return 'Please input a valid file name (.txt files only, no reserved characters).';
     }
-    if (fs.existsSync(`output/${filename}`)) {
+    if (fs.existsSync(`${OUTPUT_DIRECTORY}/${filename}`)) {
         logError(`FILE ALREADY EXISTS: "${filename}"`);
         return `"${filename}" already exists.`;
     }
