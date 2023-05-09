@@ -85,7 +85,7 @@ export const validateFirstInt = (num) => {
  * @return {boolean|string} Error message if invalid, true if valid.
  */
 export const validateSecondInt = (num) => {
-    if (!validateInt(num)) {
+    if (!validateInt(num) || !validateRange(num)) {
         logError(`INVALID SECOND INT: "${num}"`);
         return 'Please input a valid integer (max of 2^31 - 1, min of -2^31).';
     }

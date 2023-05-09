@@ -79,6 +79,8 @@ test('over max number ERROR', () => {
     const sqrtMax = Math.ceil(Math.sqrt(MAX))
     validateFirstInt(sqrtMax);
     expect(validateSecondInt(sqrtMax)).not.toBe(true);
+    validateFirstInt('9');
+    expect(validateSecondInt('9999999999999999999999999999999999999999999')).not.toBe(true);
 });
 
 test('under min number ERROR', () => {
